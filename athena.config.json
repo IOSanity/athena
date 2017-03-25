@@ -18,5 +18,30 @@
       "port": "5712"
     }]
   },
-  "dispatcher": []
+  "dispatcher": [
+    {
+      "field": "messageType",
+      "value": "createUser",
+      "route": {
+        "broker": "rabbitmq1",
+        "queue": "createUser"
+      }
+    },
+    {
+      "field": "messageType",
+      "value": "createUser",
+      "route": {
+        "broker": "kafka1",
+        "queue": "createUser"
+      }
+    },
+    {
+      "field": "messageType",
+      "value": "updateUser",
+      "route": {
+        "broker": "rabbitmq1",
+        "queue": "updateUser"
+      }
+    }
+  ]
 }
