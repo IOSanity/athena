@@ -1,6 +1,6 @@
 {
   "websocket": {
-    "port": 80,
+    "port": 8000,
     "listenIP": "0.0.0.0"
   },
   "brokers":{
