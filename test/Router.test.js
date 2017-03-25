@@ -31,7 +31,10 @@ describe('Router', () => {
 
     describe('should init Router with routeDescriptions', ()=> {
         let routerInstance = new Router(routeDescriptions);
-        assert(routerInstance instanceof Router);
+
+        it('Dispatcher init',()=>{
+            assert(routerInstance instanceof Router);
+        });
 
         it('routeDescriptions should have all router descriptions', ()=> {
             assert.deepEqual(routerInstance._routeDescriptions, routeDescriptions)
@@ -61,7 +64,7 @@ describe('Router', () => {
                     }
                 }
 
-                assert.d1eepEqual(routerInstance.route(message),spectatedRoutesSet)
+                assert.deepEqual(routerInstance.route(message),spectatedRoutesSet)
             });
         })
     });
