@@ -27,9 +27,9 @@ describe('Router', () => {
             }
         }
     ];
+    let routerInstance = new Router(routeDescriptions);
 
     describe('should init Router with routeDescriptions', ()=> {
-        let routerInstance = new Router(routeDescriptions);
 
         test('Dispatcher init',()=>{
             expect(routerInstance instanceof Router).toBeTruthy();
@@ -38,34 +38,34 @@ describe('Router', () => {
         test('routeDescriptions should have all router descriptions', ()=> {
             expect(routerInstance._routeDescriptions).toEqual(routeDescriptions)
         });
+    });
 
-        describe('should return a router description for its own message', ()=> {
-            test('message type: createUser', ()=>{
-                let message = {messageType: "createUser"};
-                let spectatedRoutesSet = [];
+    describe('should return a router description for its own message', ()=> {
+        test('message type: createUser', ()=>{
+            let message = {messageType: "createUser"};
+            let spectatedRoutesSet = [];
 
-                for(let routeDescription of routeDescriptions){
-                    if(routeDescription.value === 'createUser'){
-                        spectatedRoutesSet.push(routeDescription.route)
-                    }
+            for(let routeDescription of routeDescriptions){
+                if(routeDescription.value === 'createUser'){
+                    spectatedRoutesSet.push(routeDescription.route)
                 }
+            }
 
-                expect(routerInstance.route(message)).toEqual(spectatedRoutesSet)
-            });
+            expect(routerInstance.route(message)).toEqual(spectatedRoutesSet)
+        });
 
-            test('message type: updateUser', ()=>{
-                let message = {messageType: "updateUser"};
-                let spectatedRoutesSet = [];
+        test('message type: updateUser', ()=>{
+            let message = {messageType: "updateUser"};
+            let spectatedRoutesSet = [];
 
-                for(let routeDescription of routeDescriptions){
-                    if(routeDescription.value === 'updateUser'){
-                        spectatedRoutesSet.push(routeDescription.route)
-                    }
+            for(let routeDescription of routeDescriptions){
+                if(routeDescription.value === 'updateUser'){
+                    spectatedRoutesSet.push(routeDescription.route)
                 }
+            }
 
-                expect(routerInstance.route(message)).toEqual(spectatedRoutesSet)
-            });
-        })
+            expect(routerInstance.route(message)).toEqual(spectatedRoutesSet)
+        });
     });
 
 });
