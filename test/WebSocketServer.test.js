@@ -1,5 +1,5 @@
 import {WebSocketConnectionHelper} from './helpers';
-import WebSocketServer from '../src/websocket';
+import WebSocketServer from '../src/WebSocketServer';
 import WebSocket from 'uws';
 
 
