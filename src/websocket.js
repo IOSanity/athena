@@ -3,31 +3,41 @@ const uuid = require('uuid');
 
 export default class WebSocketServer {
 
-    constructor(port, host, messageCb, closeCb) {
+    constructor(hostname, port, messageCb, closeCb) {
         this.messageCb = messageCb;
         this.closeCb = closeCb;
-        this.server = new Server({ port: port, host: host });
+        this.server = this._initWebSocketServer(hostname,port);
         this.clients = {};
-        this.server.on('connection', this.newConnection);
     };
 
-    newConnection = (webSocket) => {
-        let server = this;
+    _initWebSocketServer = (hostname, port) => {
+        const wsServer = new Server({hostname: hostname, port: port});
+
+        wsServer.on('connection', (ws)=>this._newConnection(ws));
+        wsServer.on('error',(error)=>console.error('WebSocketServer - ERROR:',error));
+
+        return wsServer;
+    };
+
+
+    _newConnection = (webSocket) => {
         webSocket.id = uuid.v4();
 
-        webSocket.on('message', () => {
-            server.messageCb(message, this.id)
+        webSocket.on('message', (message) => {
+            this.messageCb(message, webSocket.id)
         });
 
-        webSocket.on('close', () => {
-            this.closeCb(message, this.id);
-            delete server.clients[this.id]
+        webSocket.on('close', (code,message) => {
+            this.closeCb(message, webSocket.id);
+            delete this.clients[webSocket.id]
         });
 
         this.clients[webSocket.id] = webSocket;
     };
 
-    send = (message, webSocketId) => {
-        this.clients[webSocketId].send(message);
+    send = (message, webSocketId, cb) => {
+        let webSocket = this.clients[webSocketId];
+
+        webSocket.send(message, cb);
     };
 }
