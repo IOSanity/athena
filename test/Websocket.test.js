@@ -1,4 +1,4 @@
-import WebSocketConnectionHelper from './helpers';
+import {WebSocketConnectionHelper} from './helpers';
 import WebSocketServer from '../src/websocket';
 import WebSocket from 'uws';
 
@@ -19,8 +19,8 @@ describe('WebSocketServer', () => {
     };
 
     const wsServer = new WebSocketServer(
-        wssConfiguration.port,
         wssConfiguration.hostname,
+        wssConfiguration.port,
         wssConfiguration.messageCb,
         wssConfiguration.closeCb);
 
@@ -34,7 +34,7 @@ describe('WebSocketServer', () => {
         closeCb.mockClear();
         messageCb.mockClear();
         WebSocketConnection = new WebSocketConnectionHelper();
-        wsClient = new WebSocket('ws://' + wssConfiguration.host  + ":" + wssConfiguration.port);
+        wsClient = new WebSocket('ws://' + wssConfiguration.hostname  + ":" + wssConfiguration.port);
         wsClient.on('error',(er)=>console.log(er));
         wsClient.on('open', ()=>{
             WebSocketConnection.connection = true;
