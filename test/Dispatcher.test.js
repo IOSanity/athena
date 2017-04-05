@@ -4,8 +4,6 @@ import Dispatcher from '../src/Dispatcher';
 import Router from '../src/Router';
 import Broker from 'Broker';
 
-
-
 describe('Dispatcher', () => {
     let routeDescriptions = [
         {

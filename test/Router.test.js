@@ -1,4 +1,5 @@
 import Router from '../src/Router';
+import {assert} from 'chai';
 
 describe('Router', () => {
     let routeDescriptions = [
