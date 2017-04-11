@@ -1,0 +1,1 @@
+[![Coverage Status](https://coveralls.io/repos/github/IOSanity/athena/badge.svg?branch=master)](https://coveralls.io/github/IOSanity/athena?branch=master)
