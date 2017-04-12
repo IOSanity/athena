@@ -13,7 +13,7 @@ describe('WebSocketServer', () => {
 
     const wssConfiguration = {
         port: 8080,
-        hostname: 'athena.local',
+        hostname: 'localhost',
         messageCb: messageCb,
         closeCb: closeCb
     };
