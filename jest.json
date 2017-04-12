@@ -3,10 +3,10 @@
   "collectCoverageFrom" : ["src/**/*.{js,jsx}", "!**/node_modules/**", "!**/vendor/**","!**/index.js"],
   "coverageThreshold": {
     "global": {
-      "branches": 90,
-      "functions": 90,
-      "lines": 90,
-      "statements": 90
+      "branches": 40,
+      "functions": 40,
+      "lines": 40,
+      "statements": 40
     }
   },
   "testEnvironment": "node",
