@@ -28,6 +28,15 @@ from the microservices to the websockets clients.
 
 ## How to deploy [WIP]
 
+## Why there is not a consumption topic in kafka ?
+For consumption is needed automatic queues creation and that is not a 
+good idea in kafka. Kafka have a limit of topics. Also there is no 
+API for creation of topics. The unique way to create a topic is using
+the `auto.create.topics.enable` setting. It creates the topic with 
+the default configuration that is useless. If you want to send messages
+tpo the websockets from the microservices use the AMQP broker. Your
+microservices can consume from Kafka and produce in RabbitMQ.
+
 ## TODO
 
 - Server module.
@@ -36,8 +45,15 @@ from the microservices to the websockets clients.
 - Split coverage from test scripts.
 - Usage of Promise and Async/Await instead of callbacks.
 - Handle console logs, errors and  warnings.
- 
+- Handle shutdown of Athena service
+- Add decoder option in configuration
+- Add examples of configuration based in user cases.
+
 ## IDEAS
+- Add a mode of Athena consumption based in broadcast/subscription.
+- YAML configuration option.
 - HTTP proxy too.
 - Usage of [debug](http://npmjs.com/package/debug) to handle console.
 - Usage of [Bluebird](http://bluebirdjs.com)
+- Add authentication support
+- Add ssl support or example of use with a sslproxy

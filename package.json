@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.1",
+    "bluebird": "^3.5.0",
+    "kafka-node": "^1.6.0",
+    "node-rdkafka": "^0.10.0",
     "uuid": "^3.0.1",
     "uws": "^0.14.0"
   },

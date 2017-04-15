@@ -61,7 +61,11 @@ describe('AMQPBroker', () => {
         let broker = new AMQPBroker(bad_configuration);
 
         it('AMQPBroker should not connect on call to start', async ()=>{
-            await broker.start();
+            try {
+                await broker.start();
+            } catch (error) {
+
+            }
             assert(!broker.hasOwnProperty("connection"), "Connection defined in AMQPBroker");
             assert(!broker.hasOwnProperty("channel"), "Channel defined in AMQPBroker");
         })

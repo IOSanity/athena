@@ -14,26 +14,15 @@ export default class AMQPBroker {
         this.stoped = true;
     }
 
-    start = () => {
-        console.log(`Connecting to ${this.amqpURL}`);
-        return amqp.connect(this.amqpURL)
-            .then((connection) => {
-                this.connection = connection;
-                console.log("Connected to AMQP broker");
-                return connection.createChannel()
-            })
-            .then((ch) => {
-                this.channel = ch;
-                this.stoped = false;
-                this.registerInstance();
-                return ch.assertQueue(this.comsumptionQueue)
-                    .then((ok) => {
-                        return this.channel.consume(this.comsumptionQueue, this.consume)
-                    })
-            })
-            .catch((error) => {
-                console.error(`${error.stack}\nAMQP error : ${error}`)
-            });
+    start = async () => {
+        console.log(`Connecting to ${this.name} : ${this.amqpURL}`);
+        this.connection = await amqp.connect(this.amqpURL);
+        console.log(`Connected to ${this.name}`);
+        this.channel = await this.connection.createChannel();
+        this.stoped = false;
+        await this.registerInstance();
+        await this.channel.assertQueue(this.comsumptionQueue);
+        await this.channel.consume(this.comsumptionQueue, this.consume)
     };
 
     isStoped = () =>{
@@ -46,20 +35,20 @@ export default class AMQPBroker {
         this.stoped = true;
     };
 
-    produce = (message, queue) => {
-        let _this = this;
-        return this.channel.assertQueue(queue).then((ok) => {
-            return _this.channel.sendToQueue(queue, new Buffer(message))
-        })
+    produce = async (message, queue) => {
+        await this.channel.assertQueue(queue);
+        await this.channel.sendToQueue(queue, new Buffer(message));
+        console.log(`Produced message in ${this.name} queue ${queue} : ${message}`);
     };
 
     consume = (raw_message) => {
         let message = raw_message.content.toString();
+        console.log(`Consumed message from ${this.name} : ${message}`);
         this.comsumptionCb(message)
-
     };
 
-    registerInstance = () => {
-        this.produce(this.comsumptionQueue, "athena.instances")
+    registerInstance = async () => {
+        await this.produce(this.comsumptionQueue, "athena.instances");
+        console.log(`Registered instance in ${this.name} : ${this.comsumptionQueue}`);
     };
 }
