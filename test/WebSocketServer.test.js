@@ -106,5 +106,14 @@ describe('WebSocketServer', () => {
 
         })
     });
+    describe('WebSocket Server connection fail, log error',()=>{
+        test('Bad connection', async()=>{
+            const wsServer = new WebSocketServer(
+                "jshdfaryusd",
+                8000,
+                wssConfiguration.messageCb,
+                wssConfiguration.closeCb);
+        })
 
+    })
 });

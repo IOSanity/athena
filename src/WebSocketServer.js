@@ -11,10 +11,11 @@ export default class WebSocketServer {
     };
 
     _initWebSocketServer = (hostname, port) => {
-        const wsServer = new Server({hostname: hostname, port: port});
-
-        wsServer.on('connection', (ws)=>this._newConnection(ws));
-        wsServer.on('error',(error)=>console.error('WebSocketServer - ERROR:',error));
+        const wsServer = new Server({hostname: hostname, port: port}, () => {
+            wsServer.on('connection', (ws)=>this._newConnection(ws));
+            /* istanbul ignore next: error in ws is difficult to produce */
+            wsServer.on('error', (error)=>console.error('WebSocketServer - ERROR:', error));
+        });
 
         return wsServer;
     };
