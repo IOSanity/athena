@@ -4,9 +4,8 @@ MAINTAINER Sergio Medina Toledo <lumasepa@gmail.com>
 
 ADD . /opt/athena
 
-
 RUN cd /opt/athena && npm i
 
-WORKDIR /opt/athena/src
+WORKDIR /opt/athena
 
-CMD ["node server.js"]
+CMD ["npm start --config athena.config.json"]

@@ -1,6 +1,6 @@
 athena:
-    build: .
-    dockerfile: athena.dockerfile
+    #build: .
+    image: athena:latest
     links:
       - rabbitmq
       - kafka
