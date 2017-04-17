@@ -4,6 +4,7 @@
   "description": "Websocket proxy to amqp and kafka",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node ./src/start.js --config athena.config.json",
     "test": "jest --coverage --config jest.json",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@types/jest": "^19.2.2",
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.24.0",
     "babel-plugin-transform-regenerator": "^6.22.0",
     "babel-polyfill": "^6.23.0",
