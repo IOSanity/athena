@@ -5,8 +5,8 @@ export default class Dispatcher {
         this._Brokers = brokers;
     }
 
-    dispatch = (message) => {
-        let routes = this._Router.route(message);
+    dispatch = (decodedMessage, message) => {
+        let routes = this._Router.route(decodedMessage);
 
         routes.forEach((route) => {
             this._Brokers[route.broker].produce(message, route.queue)
