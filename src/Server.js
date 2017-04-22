@@ -7,7 +7,7 @@ import {v4 as uuid} from 'uuid';
 import debug from 'debug';
 
 
-const log = debug('Athena Server');
+const log = debug('AthenaServer');
 
 export default class Server {
     constructor(configuration){
@@ -20,7 +20,7 @@ export default class Server {
             {messageCb: this._webSocketServerMessageCallback},
             {closeCb: this._webSocketServerCloseCallback});
         this.brokersConfiguration = Object.assign({}, configuration.brokers);
-        this.routeDescriptions = Object.assign({}, configuration.dispatcher);
+        this.routeDescriptions = configuration.dispatcher;
         this.decoder = JSONDecode;
         this.closeQueue = 'athena.close'
     };
