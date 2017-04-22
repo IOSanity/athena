@@ -4,6 +4,10 @@ import Router from './Router';
 import JSONDecode from './decoders/json';
 import AMQPBroker from './brokers/amqp';
 import {v4 as uuid} from 'uuid';
+import debug from 'debug';
+
+
+const log = debug('Athena Server');
 
 export default class Server {
     constructor(configuration){
@@ -23,28 +27,62 @@ export default class Server {
 
     _sendCloseToQueue(message){
         for(let broker in this.brokers){
-            broker.produce(message,this.closeQueue)
+            try{
+                broker.produce(message,this.closeQueue)
+            }catch (e){
+                log(`ERROR: decode failed : ${e}`);
+                log(`message: ${message}`);
+                log(`broker: ${broker}`);
+            }
+
         }
     }
 
     _webSocketServerCloseCallback = (webSocketId) => {
-        let message = JSON.stringify({webSocketId: webSocketId});
-        this._sendCloseToQueue(message)
+        let message;
+        try{
+            message = JSON.stringify({webSocketId: webSocketId});
+        }catch (e){
+            log(`ERROR: decode failed : ${e}`);
+            log(`websSocket Id: ${webSocketId}`);
+        }
+        webSocketId && this._sendCloseToQueue(message)
     };
 
     _webSocketServerErrorCallback = (error, webSocketId) => {
-        let message = JSON.stringify({webSocketId: webSocketId, error: error});
-        this._sendCloseToQueue(message)
+        let message;
+
+        try{
+            message = JSON.stringify({webSocketId: webSocketId, error: error});
+        }catch (e){
+            log(`ERROR: decode failed : ${e}`);
+            log(`websSocket Id: ${webSocketId}`);
+        }
+
+        message && this._sendCloseToQueue(message)
     };
 
     _webSocketServerMessageCallback = (message) => {
-        let decodedMessage = this.decoder(message);
-        this.dispatcher.dispatch(decodedMessage, message)
+        let decodedMessage;
+        try{
+            decodedMessage = this.decoder(message);
+        }catch (e){
+            log(`ERROR: decode failed : ${e}`);
+            log(`Message: ${message}`);
+        }
+        decodedMessage && this.dispatcher.dispatch(decodedMessage, message)
     };
 
     _brokerConsumeCallback = (message) =>{
-        let decodedMessage = this.decoder(message);
-        this.webSocketServer.send(decodedMessage.message, decodedMessage.id)
+        let decodedMessage;
+        try{
+            decodedMessage = this.decoder(message);
+        }catch (e){
+            log(`ERROR: decode failed : ${e}`);
+            log(`Message: ${message}`);
+        }
+
+        decodedMessage && this.webSocketServer.send(decodedMessage.message, decodedMessage.id)
     };
 
     _startWebSocketServer = () =>{
@@ -55,7 +93,7 @@ export default class Server {
                 this.webSocketConfiguration.messageCb,
                 this.webSocketConfiguration.closeCb,
                 this._webSocketServerErrorCallback);
-            console.log(`webSocketServer listening at ${this.webSocketConfiguration.hostname}:${this.webSocketConfiguration.port}`);
+            log(`webSocketServer listening at ${this.webSocketConfiguration.hostname}:${this.webSocketConfiguration.port}`);
         }
         catch(error){
             console.error(`Error creating WebSocket instance: ${error}`)
@@ -71,7 +109,7 @@ export default class Server {
                 this.brokers.push(broker)
             });
 
-            console.info(`Brokers: ${this.brokers.length}`)
+            log(`Brokers: ${this.brokers.length}`)
         }catch(error){
             console.error(`Error instancing brokers: ${error}`)
         }
@@ -80,7 +118,7 @@ export default class Server {
     _instanceRouter = () => {
         try{
             this.router = new Router(this.routeDescriptions);
-            console.info('Router instanced')
+            log('Router instanced')
         }catch (error){
             console.error(`Error instancing Router: ${error}`)
         }
@@ -89,7 +127,7 @@ export default class Server {
     _instanceDispatcher = () => {
         try{
             this.dispatcher = new Dispatcher(this.router, this.brokers);
-            console.log('Dispatcher instanced')
+            log('Dispatcher instanced')
         }catch (error){
             console.error(`Error instancing Dispatcher: ${error}`)
         }
@@ -112,8 +150,8 @@ export default class Server {
         this._instanceRouter();
         this._instanceDispatcher();
 
-        console.info('Starting brokers');
+        log('Starting brokers');
         await this._startBrokers();
 
-    }
+    };
 }
