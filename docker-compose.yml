@@ -1,25 +1,30 @@
-athena:
-    #build: .
-    image: athena:latest
-    links:
-      - rabbitmq
-      - kafka
+version: "3"
+services:
+  athena:
+      #build: .
+      image: athena:latest
+      links:
+        - rabbitmq
+#        - kafka
+      ports:
+        - "127.0.0.1:8000:8000"
+      depends_on:
+        - rabbitmq
+#        - kafka
+  rabbitmq:
+    image: rabbitmq:management
     ports:
-      - "8000:8000"
-rabbitmq:
-  image: rabbitmq:management
-  ports:
-    - "127.0.0.1:5672:5672"
-    - "127.0.0.1:15672:15672"
-zookeeper:
-  image: confluent/zookeeper
-  ports:
-    - "2181:2181"
-kafka:
-  image: confluent/kafka
-  ports:
-    - "9092:9092"
-  links:
-    - zookeeper:zookeeper
-  environment:
-   KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+#zookeeper:
+#  image: confluent/zookeeper
+#  ports:
+#    - "2181:2181"
+#kafka:
+#  image: confluent/kafka
+#  ports:
+#    - "9092:9092"
+#  links:
+#    - zookeeper:zookeeper
+#  environment:
+#   KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
