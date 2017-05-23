@@ -6,16 +6,11 @@
   "brokers":{
     "amqp": [{
       "name": "rabbitmq1",
-      "host": "127.0.0.1",
-      "port": "5712",
+      "host": "rabbitmq",
+      "port": "5672",
       "user": "guest",
       "password": "guest",
       "vHost": "/"
-    }],
-    "kafka": [{
-      "name": "kafka1",
-      "host": "127.0.0.1",
-      "port": "5712"
     }]
   },
   "dispatcher": [

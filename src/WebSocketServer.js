@@ -3,9 +3,10 @@ const uuid = require('uuid');
 
 export default class WebSocketServer {
 
-    constructor(hostname, port, messageCb, closeCb) {
+    constructor(hostname, port, messageCb, closeCb, errorCb) {
         this.messageCb = messageCb;
         this.closeCb = closeCb;
+        this.errorCb = errorCb;
         this.server = this._initWebSocketServer(hostname,port);
         this.clients = {};
     };
@@ -29,7 +30,12 @@ export default class WebSocketServer {
         });
 
         webSocket.on('close', (code,message) => {
-            this.closeCb(message, webSocket.id);
+            this.closeCb(webSocket.id);
+            delete this.clients[webSocket.id]
+        });
+
+        webSocket.on('error', (error) => {
+            this.errorCb(error, webSocket.id);
             delete this.clients[webSocket.id]
         });
 
